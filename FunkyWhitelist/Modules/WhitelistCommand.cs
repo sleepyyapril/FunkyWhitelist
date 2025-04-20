@@ -20,7 +20,7 @@ public class WhitelistCommand : ModuleBase<SocketCommandContext>
         
         await Context.Message.DeleteAsync();
 
-        if (response == "UnprocessableContent")
+        if (response == "UnprocessableEntity")
         {
             await ReplyAsync($"Username ``{username}`` was not found.");
             return;
@@ -51,7 +51,7 @@ public class WhitelistCommand : ModuleBase<SocketCommandContext>
         
         await Context.Message.DeleteAsync();
 
-        if (response == "UnprocessableContent")
+        if (response == "UnprocessableEntity")
         {
             await reply.ReplyAsync($"Username ``{username}`` was not found.");
             return;
