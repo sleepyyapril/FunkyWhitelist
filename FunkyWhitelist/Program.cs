@@ -34,7 +34,6 @@ public class Program
             .AddSingleton(SocketConfig)
             .AddSingleton<DiscordSocketClient>()
             .AddSingleton(x => new InteractionService(x.GetRequiredService<DiscordSocketClient>()))
-            .AddSingleton<InteractionHandler>()
             .AddSingleton(x => new WhitelistService(connectAddress, apiToken))
             .BuildServiceProvider();
 

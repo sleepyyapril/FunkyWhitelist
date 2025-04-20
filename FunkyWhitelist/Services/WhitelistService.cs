@@ -23,14 +23,14 @@ public class WhitelistService
     public async Task<string?> WhitelistUser(string name)
     {
         var whitelistActionBody = new WhitelistActionBody(name);
-        var jwhitelistActionBodyJson = JsonConvert.SerializeObject(whitelistActionBody);
-        var httpContent = new StringContent(jwhitelistActionBodyJson, Encoding.UTF8, "application/json");
+        var whitelistActionBodyJson = JsonConvert.SerializeObject(whitelistActionBody);
+        var httpContent = new StringContent(whitelistActionBodyJson, Encoding.UTF8, "application/json");
         var response = await _httpClient.PostAsync($"{ConnectAddress}/admin/actions/whitelist", httpContent);
 
         if (!response.IsSuccessStatusCode)
             return $"Error code {response.StatusCode}";
-        else
-            return "Success";
+
+        return "Success";
     }
 }
 
