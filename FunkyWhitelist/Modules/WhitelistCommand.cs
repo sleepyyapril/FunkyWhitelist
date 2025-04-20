@@ -57,7 +57,7 @@ public class WhitelistCommand : ModuleBase<SocketCommandContext>
             return;
         }
         
-        if (response == "NotFound")
+        if (response == "Conflict")
         {
             await ReplyAsync($":x: {username} is already whitelisted.");
             return;

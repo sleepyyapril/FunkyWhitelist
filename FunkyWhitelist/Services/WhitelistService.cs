@@ -27,7 +27,7 @@ public class WhitelistService
         var response = await _httpClient.PostAsync($"http://{ConnectAddress}/admin/actions/whitelist", httpContent);
 
         if (!response.IsSuccessStatusCode)
-            return response.StatusCode.ToString();
+            return response.Content.ReadAsStringAsync().Result;
 
         return null;
     }
