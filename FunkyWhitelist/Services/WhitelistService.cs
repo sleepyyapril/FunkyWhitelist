@@ -24,7 +24,7 @@ public class WhitelistService
         var whitelistActionBody = new WhitelistActionBody(name);
         var whitelistActionBodyJson = JsonConvert.SerializeObject(whitelistActionBody);
         var httpContent = new StringContent(whitelistActionBodyJson, Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync($"https://{ConnectAddress}/admin/actions/whitelist", httpContent);
+        var response = await _httpClient.PostAsync($"http://{ConnectAddress}/admin/actions/whitelist", httpContent);
 
         if (!response.IsSuccessStatusCode)
             return response.StatusCode.ToString();
