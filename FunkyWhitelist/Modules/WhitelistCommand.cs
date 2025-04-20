@@ -22,13 +22,13 @@ public class WhitelistCommand : ModuleBase<SocketCommandContext>
 
         if (response == "UnprocessableEntity")
         {
-            await ReplyAsync($"Username ``{username}`` was not found.");
+            await ReplyAsync($":x: ``{username}`` is not a valid SS14 account.");
             return;
         }
 
         if (response == "Conflict")
         {
-            await ReplyAsync($"User {username} is already whitelisted.");
+            await ReplyAsync($":x: {username} is already whitelisted.");
             return;
         }
 
@@ -53,7 +53,13 @@ public class WhitelistCommand : ModuleBase<SocketCommandContext>
 
         if (response == "UnprocessableEntity")
         {
-            await reply.ReplyAsync($"Username ``{username}`` was not found.");
+            await reply.ReplyAsync($":x: ``{username}`` is not a valid SS14 account.");
+            return;
+        }
+        
+        if (response == "Conflict")
+        {
+            await ReplyAsync($":x: {username} is already whitelisted.");
             return;
         }
 
