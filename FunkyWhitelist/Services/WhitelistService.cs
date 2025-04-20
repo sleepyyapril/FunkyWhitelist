@@ -1,6 +1,5 @@
-using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
-using System.Text.Json.Nodes;
 using Newtonsoft.Json;
 
 namespace FunkyWhitelist.Services;
@@ -14,6 +13,7 @@ public class WhitelistService
     public WhitelistService(string connectAddress, string apiToken)
     {
         _httpClient = new HttpClient();
+        _httpClient.DefaultRequestHeaders.Add("Authorization", "application/json");
         
         ConnectAddress = connectAddress;
         ApiToken = apiToken;
@@ -25,19 +25,16 @@ public class WhitelistService
         var whitelistActionBody = new WhitelistActionBody(name);
         var whitelistActionBodyJson = JsonConvert.SerializeObject(whitelistActionBody);
         var httpContent = new StringContent(whitelistActionBodyJson, Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync($"{ConnectAddress}/admin/actions/whitelist", httpContent);
+        var response = await _httpClient.PostAsync($"https://{ConnectAddress}/admin/actions/whitelist", httpContent);
 
         if (!response.IsSuccessStatusCode)
-            return $"Error code {response.StatusCode}";
+            return response.StatusCode.ToString();
 
-        return "Success";
+        return null;
     }
 }
 
-public class WhitelistActionBody
+public class WhitelistActionBody(string username)
 {
-    public string Username { get; set; }
-
-    public WhitelistActionBody() => Username = string.Empty;
-    public WhitelistActionBody(string username) => Username = username;
+    public string Username { get; set; } = username;
 }

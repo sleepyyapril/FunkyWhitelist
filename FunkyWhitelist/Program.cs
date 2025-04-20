@@ -16,7 +16,7 @@ public class Program
 
     private static readonly DiscordSocketConfig SocketConfig = new()
     {
-        GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.GuildMembers | GatewayIntents.MessageContent,
+        GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent,
         AlwaysDownloadUsers = true,
     };
 
@@ -29,12 +29,17 @@ public class Program
         var connectAddress = _configuration["connect_address"];
         var apiToken = _configuration["admin_api_token"];
         
+        if (string.IsNullOrWhiteSpace(connectAddress) || string.IsNullOrWhiteSpace(apiToken))
+        {
+            Console.WriteLine("Please provide valid connect_address and/or api_token.");
+            return;
+        }
+        
         _services = new ServiceCollection()
             .AddSingleton(_configuration)
             .AddSingleton(SocketConfig)
             .AddSingleton<DiscordSocketClient>()
-            .AddSingleton(x => new InteractionService(x.GetRequiredService<DiscordSocketClient>()))
-            .AddSingleton(x => new WhitelistService(connectAddress, apiToken))
+            .AddScoped<WhitelistService>(_ => new WhitelistService(connectAddress, apiToken))
             .BuildServiceProvider();
 
         var client = _services.GetRequiredService<DiscordSocketClient>();
