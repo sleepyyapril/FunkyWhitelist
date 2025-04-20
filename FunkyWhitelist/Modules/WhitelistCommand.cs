@@ -11,9 +11,36 @@ public class WhitelistCommand : ModuleBase<SocketCommandContext>
     private const ulong WhitelistChannelId = 1295833135992537130;
 
     [Command("whitelist")]
+    [Alias("wl")]
     [RequireContext(ContextType.Guild)]
     [RequireRole(1297993874576244788)]
-    public async Task Whitelist()
+    public async Task ReplyWhitelist(string username)
+    {
+        var response = await WhitelistService.WhitelistUser(username);
+        
+        await Context.Message.DeleteAsync();
+
+        if (response == "UnprocessableContent")
+        {
+            await ReplyAsync($"Username ``{username}`` was not found.");
+            return;
+        }
+
+        if (response == "Conflict")
+        {
+            await ReplyAsync($"User {username} is already whitelisted.");
+            return;
+        }
+
+        if (response != null)
+            await ReplyAsync(response);
+    }
+    
+    [Command("replywhitelist")]
+    [Alias("replywl")]
+    [RequireContext(ContextType.Guild)]
+    [RequireRole(1297993874576244788)]
+    public async Task ReplyWhitelist()
     {
         if (Context.Message.ReferencedMessage is not { } reply
             || Context.Message.Channel.Id != WhitelistChannelId)
