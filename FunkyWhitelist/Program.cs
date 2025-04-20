@@ -1,5 +1,5 @@
 ﻿using Discord;
-using Discord.Interactions;
+using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,11 +12,11 @@ public class Program
     private static IConfiguration _configuration = null!;
     private static IServiceProvider _services = null!;
     
-    private const string ConfigurationFileName = "WhitelistBot.json";
+    private const string ConfigurationFileName = "FunkyWhitelist.json";
 
     private static readonly DiscordSocketConfig SocketConfig = new()
     {
-        GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent,
+        GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent | GatewayIntents.GuildMembers,
         AlwaysDownloadUsers = true,
     };
 
@@ -39,8 +39,13 @@ public class Program
             .AddSingleton(_configuration)
             .AddSingleton(SocketConfig)
             .AddSingleton<DiscordSocketClient>()
+            .AddSingleton<CommandService>()
+            .AddSingleton<CommandHandlingService>()
             .AddScoped<WhitelistService>(_ => new WhitelistService(connectAddress, apiToken))
             .BuildServiceProvider();
+
+        var commands = _services.GetRequiredService<CommandHandlingService>();
+        await commands.InitializeAsync();
 
         var client = _services.GetRequiredService<DiscordSocketClient>();
         client.Log += LogAsync;

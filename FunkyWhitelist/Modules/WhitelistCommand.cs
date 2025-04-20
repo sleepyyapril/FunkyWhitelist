@@ -12,12 +12,11 @@ public class WhitelistCommand : ModuleBase<SocketCommandContext>
 
     [Command("whitelist")]
     [RequireContext(ContextType.Guild)]
+    [RequireRole(1297993874576244788)]
     public async Task Whitelist()
     {
         if (Context.Message.ReferencedMessage is not { } reply
-            || Context.Message.Channel.Id != WhitelistChannelId
-            && (Context.Message.Author.Id != 926913156788412496
-                || Context.Message.Author.Id != 280450694060965889))
+            || Context.Message.Channel.Id != WhitelistChannelId)
             return;
         
         var username = reply.Content;

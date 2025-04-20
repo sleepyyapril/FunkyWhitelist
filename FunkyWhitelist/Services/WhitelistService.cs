@@ -1,4 +1,3 @@
-using System.Net.Http.Headers;
 using System.Text;
 using Newtonsoft.Json;
 
@@ -13,7 +12,7 @@ public class WhitelistService
     public WhitelistService(string connectAddress, string apiToken)
     {
         _httpClient = new HttpClient();
-        _httpClient.DefaultRequestHeaders.Add("Authorization", "application/json");
+        _httpClient.DefaultRequestHeaders.Add("Authorization", $"SS14Token {apiToken}");
         
         ConnectAddress = connectAddress;
         ApiToken = apiToken;
