@@ -21,7 +21,20 @@ public class WhitelistService
 
     public async Task<string?> WhitelistUser(string name)
     {
-        var whitelistActionBody = new WhitelistActionBody(name);
+        var whitelistActionBody = new WhitelistActionBody(name, true);
+        var whitelistActionBodyJson = JsonConvert.SerializeObject(whitelistActionBody);
+        var httpContent = new StringContent(whitelistActionBodyJson, Encoding.UTF8, "application/json");
+        var response = await _httpClient.PostAsync($"http://{ConnectAddress}/admin/actions/whitelist", httpContent);
+
+        if (!response.IsSuccessStatusCode)
+            return response.StatusCode.ToString();
+
+        return null;
+    }
+    
+    public async Task<string?> UnwhitelistUser(string name)
+    {
+        var whitelistActionBody = new WhitelistActionBody(name, false);
         var whitelistActionBodyJson = JsonConvert.SerializeObject(whitelistActionBody);
         var httpContent = new StringContent(whitelistActionBodyJson, Encoding.UTF8, "application/json");
         var response = await _httpClient.PostAsync($"http://{ConnectAddress}/admin/actions/whitelist", httpContent);
@@ -33,7 +46,8 @@ public class WhitelistService
     }
 }
 
-public class WhitelistActionBody(string username)
+public class WhitelistActionBody(string username, bool isAddingWhitelist)
 {
     public string Username { get; set; } = username;
+    public bool IsAddingWhitelist { get; set; } = isAddingWhitelist; 
 }

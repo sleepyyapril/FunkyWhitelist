@@ -74,4 +74,30 @@ public class WhitelistCommand : ModuleBase<SocketCommandContext>
         
         await reply.AddReactionAsync(funkyEmote);
     }
+    
+    [Command("unwhitelist")]
+    [Alias("unwl")]
+    [RequireContext(ContextType.Guild)]
+    [RequireRole(1297993874576244788)]
+    public async Task Unwhitelist(string username)
+    {
+        var response = await WhitelistService.UnwhitelistUser(username);
+        
+        await Context.Message.DeleteAsync();
+
+        if (response == "UnprocessableEntity")
+        {
+            await ReplyAsync($":x: ``{username}`` is not a valid SS14 account.");
+            return;
+        }
+
+        if (response == "Conflict")
+        {
+            await ReplyAsync($":x: {username} is already whitelisted.");
+            return;
+        }
+
+        if (response != null)
+            await ReplyAsync(response);
+    }
 }
