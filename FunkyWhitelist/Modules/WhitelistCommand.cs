@@ -93,7 +93,7 @@ public class WhitelistCommand : ModuleBase<SocketCommandContext>
 
         if (response == "Conflict")
         {
-            await ReplyAsync($":x: {username} is already whitelisted.");
+            await ReplyAsync($":x: {username} is not whitelisted.");
             return;
         }
 
